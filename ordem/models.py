@@ -12,11 +12,3 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
 
-class Usuario(models.Model):
-    
-    atual = models.IntegerField()
-    maximo = models.IntegerField()
-    
-    def __str__(self) -> str:
-        return f'{str(self.atual)} de {str(self.maximo)}'
-    
