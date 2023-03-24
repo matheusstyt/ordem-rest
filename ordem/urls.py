@@ -3,10 +3,10 @@ from django.contrib import admin
 from django.urls import include, path
 from api.views.token import GetToken
 from api.views.session import SessionViewSet
-from api.views.user import PersonagemViewSet, UserViewSet
+from api.views.user import PersonagemViewSet, UserList, UserViewSet
 from rest_framework.authtoken import views
 router = routers.DefaultRouter()
-router.register(r'users', UserViewSet)
+router.register(r'users', UserViewSet, basename='user')
 router.register(r'personagem', PersonagemViewSet)
 router.register(r'session', SessionViewSet)
 urlpatterns = [

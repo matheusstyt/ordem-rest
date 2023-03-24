@@ -30,7 +30,7 @@ class SessionPlayers(models.Model):
     status = models.BooleanField(default=False)
     
     def __str__(self) -> str:
-        return self.fk_mestre.email
+        return self.fk_player.email
     
 class Solicitacao(models.Model):
     fk_session = models.ForeignKey(Session, on_delete=models.CASCADE)

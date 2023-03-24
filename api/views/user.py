@@ -17,7 +17,13 @@ class TokenAuthenticationCustom(TokenAuthentication):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    #permission_classes = [IsAuthenticated]
+from rest_framework import generics
 
+class UserList(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    
 class LoginViewSet(views.APIView):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
