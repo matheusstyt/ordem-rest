@@ -1,38 +1,37 @@
-from rest_framework import viewsets
 from api.serializers.session import *
 from session.models import *
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import permissions
-
+from session.filters import SessionFilter
 from rest_framework import status
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, generics, permissions, viewsets
 class SessionViewSet(viewsets.ModelViewSet):
     serializer_class = SessionSerializer
     permission_classes = [permissions.IsAuthenticated]
-    queryset = Session.objects.all()
-    
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['fk_mestre']
+    search_fields = ['fk_mestre__username']
+    ordering_fields = ['data_criacao']
+
     def list(self, request, *args, **kwargs):
-        itens_list = list()
-        all_Session = Session.objects.all()
-        all_Player = SessionPlayers.objects.all()
-        for session in all_Session:
-            item_full = dict()  
-            player_list = list()
-            item_full['id'] = session.id
-            item_full['fk_mestre'] = session.fk_mestre.id
-            item_full['data_criacao'] = session.data_criacao
-            item_full['qtd_max'] = session.qtd_max
-            item_full['status'] = session.status
-            for player in all_Player:
-                if player.fk_session.id == session.id:
-                    player_dict = {
-                        'id': player.fk_player.id,
-                        'status': player.status,
-                    }
-                    player_list.append(player_dict)
-                    
-            item_full['players'] = player_list
-            itens_list.append(item_full)    
-            
-        res = { "session": itens_list }
-        return Response(res, status=status.HTTP_200_OK)
+        sessions = Session.objects.filter(fk_mestre=request.user)
+        items = []
+        for session in sessions:
+            players = SessionPlayers.objects.filter(fk_session=session)
+            players_list = []
+            for player in players:
+                players_list.append({
+                    'id': player.fk_player.id,
+                    'status': player.status,
+                })
+            items.append({
+                'id': session.id,
+                'fk_mestre': session.fk_mestre.id,
+                'descricao': session.descricao,
+                'data_criacao': session.data_criacao,
+                'status': session.status,
+                'players': players_list,
+            })
+        return Response({'session': items})

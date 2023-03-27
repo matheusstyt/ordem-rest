@@ -8,7 +8,7 @@ from rest_framework.authtoken import views
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet, basename='user')
 router.register(r'personagem', PersonagemViewSet)
-router.register(r'session', SessionViewSet)
+router.register(r'session', SessionViewSet, basename='session')
 urlpatterns = [
     path('token', GetToken.as_view()),
     path('', include(router.urls)),

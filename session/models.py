@@ -10,7 +10,7 @@ class FriendList(models.Model):
 class Session(models.Model):
     fk_mestre = models.ForeignKey(User, on_delete=models.CASCADE)
     data_criacao = models.CharField(max_length=100)
-    #qtd_max = models.IntegerField(blank=False, null=False)
+    descricao = models.CharField(max_length=100)
     status = models.BooleanField(default=False)
     
     def __str__(self) -> str:
