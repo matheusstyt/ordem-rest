@@ -111,7 +111,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pt-br'
 
 TIME_ZONE = 'UTC'
 
@@ -145,10 +145,10 @@ REST_FRAMEWORK = {
 }
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.100.26']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.100.26', '170.10.0.50']
 
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:8080',  
-    'http://192.168.100.26:8080', 
-    'http://192.168.100.26:8000', 
+    'http://170.10.0.50:8080', 
+    'http://170.10.0.50:8000', 
 ]

@@ -4,8 +4,13 @@ from django.contrib.auth.models import User
 class FriendList(models.Model):
     fk_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friendlist_user_set')
     fk_friend = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friendlist_friend_set')
+    status_solicitacao = models.BooleanField(default=False)
     status_online = models.BooleanField(default=False)
     
+class SolicitacaoContato(models.Model):
+    origem = models.ForeignKey(User, on_delete=models.CASCADE, related_name='solicitacao_contato_origem_set')
+    destino = models.ForeignKey(User, on_delete=models.CASCADE, related_name='solicitacao_contato_destino_set')
+    status = models.BooleanField(default=False) 
 # Create your models here.
 class Session(models.Model):
     fk_mestre = models.ForeignKey(User, on_delete=models.CASCADE)

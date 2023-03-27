@@ -1,15 +1,19 @@
 from api.serializers.personagem import PersonagemSerializer
 from personagem.models import Personagem
-from rest_framework import viewsets, views
+from rest_framework import viewsets, views, filters
 from django.contrib.auth.models import User
 from rest_framework.response import Response
+from rest_framework import permissions
 from rest_framework import status
 
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication
-from api.serializers.user import UserSerializer
+from api.serializers.user import FriendListSerializer, SolicitacaoContatoSerializer, UserSerializer
 from rest_framework.decorators import authentication_classes, permission_classes
+from django_filters.rest_framework import DjangoFilterBackend
+
+from session.models import FriendList, SolicitacaoContato
 
 class TokenAuthenticationCustom(TokenAuthentication):
     keyword = 'Token'
@@ -17,13 +21,59 @@ class TokenAuthenticationCustom(TokenAuthentication):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    #permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['username']
+    search_fields = ['username']
+
 from rest_framework import generics
 
-class UserList(generics.ListCreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    
+class UserList(views.APIView):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None):
+        queryset = User.objects.all()  # obtenha todos os usuários
+        username_query = request.GET.get('username')  # obtenha o parâmetro de consulta 'username'
+
+        if username_query:  # se o parâmetro de consulta 'username' estiver presente
+            queryset = queryset.filter(username__icontains=username_query)  # filtre os usuários com base no nome de usuário
+
+        serializer = UserSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+class FriendListViewSet(viewsets.ModelViewSet):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+    queryset = FriendList.objects.all()
+    serializer_class = FriendListSerializer
+
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['fk_user']
+    search_fields = ['fk_user']
+
+class SolicitacaoContatoViewSet(viewsets.ModelViewSet):
+    #authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+    queryset = SolicitacaoContato.objects.all()
+    serializer_class = SolicitacaoContatoSerializer
+    def list(self, request, *args, **kwargs):
+            itens_list = list()
+            all_Solicitacao = SolicitacaoContato.objects.all()
+            for item in all_Solicitacao:
+                item_full = dict()
+
+                item_full['id'] = item.id
+                item_full['origem'] = item.origem.username
+                item_full['destino'] = item.destino.username
+                item_full['status'] = item.status
+
+                itens_list.append(item_full)
+
+            res = { "ask": itens_list }
+
+            return Response(res, status=status.HTTP_200_OK)
+
 class LoginViewSet(views.APIView):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
