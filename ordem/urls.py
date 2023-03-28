@@ -2,7 +2,7 @@ from rest_framework import routers
 from django.contrib import admin
 from django.urls import include, path
 
-from api.views.token import GetToken
+from api.views.token import GetToken, LogoutView
 from api.views.session import SessionViewSet
 from api.views.user import FriendListViewSet, PersonagemViewSet, SolicitacaoContatoViewSet, UserList, UserViewSet
 from rest_framework.authtoken import views
@@ -16,5 +16,6 @@ urlpatterns = [
     path('token', GetToken.as_view()),
     path('', include(router.urls)),
     path('admin/', admin.site.urls),
+    path('logout/', LogoutView.as_view(), name='logout'),
     
 ]

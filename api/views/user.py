@@ -43,37 +43,46 @@ class UserList(views.APIView):
         return Response(serializer.data)
 
 class FriendListViewSet(viewsets.ModelViewSet):
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
     queryset = FriendList.objects.all()
     serializer_class = FriendListSerializer
 
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['fk_user']
-    search_fields = ['fk_user']
+    def list(self, request, *args, **kwargs):
+        contacts = FriendList.objects.filter(fk_user=request.user)
+        items = []
+        for contact in contacts:
+
+            items.append({
+                'id': contact.id,
+                'fk_user': contact.fk_user.username,
+                'fk_friend': contact.fk_friend.username,
+                'data_inicio': contact.data_inicio,
+                'status_online': contact.status_online,
+ 
+            })
+        return Response({'list_contact': items})
 
 class SolicitacaoContatoViewSet(viewsets.ModelViewSet):
-    #authentication_classes = [SessionAuthentication, BasicAuthentication]
-    permission_classes = [IsAuthenticated]
     queryset = SolicitacaoContato.objects.all()
     serializer_class = SolicitacaoContatoSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
     def list(self, request, *args, **kwargs):
-            itens_list = list()
-            all_Solicitacao = SolicitacaoContato.objects.all()
-            for item in all_Solicitacao:
-                item_full = dict()
+        solicitacoes = SolicitacaoContato.objects.filter(destino=request.user)
+        items = []
+        for solicitacao in solicitacoes:
 
-                item_full['id'] = item.id
-                item_full['origem'] = item.origem.username
-                item_full['destino'] = item.destino.username
-                item_full['status'] = item.status
-
-                itens_list.append(item_full)
-
-            res = { "ask": itens_list }
-
-            return Response(res, status=status.HTTP_200_OK)
-
+            items.append({
+                'id': solicitacao.id,
+                'origem': solicitacao.origem.username,
+                'destino': solicitacao.destino.username,
+                'fk_origem': solicitacao.origem.id,
+                'fk_destino': solicitacao.destino.id,
+                'status': solicitacao.status,
+ 
+            })
+        return Response({'ask': items})
+    
 class LoginViewSet(views.APIView):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]

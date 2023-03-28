@@ -152,3 +152,5 @@ CORS_ORIGIN_WHITELIST = [
     'http://170.10.0.50:8080', 
     'http://170.10.0.50:8000', 
 ]
+
+LOGOUT_REDIRECT_URL = "/logout"

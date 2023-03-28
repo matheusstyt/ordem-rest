@@ -4,8 +4,10 @@ from django.contrib.auth.models import User
 class FriendList(models.Model):
     fk_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friendlist_user_set')
     fk_friend = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friendlist_friend_set')
-    status_solicitacao = models.BooleanField(default=False)
+    data_inicio = models.CharField(max_length=100)
     status_online = models.BooleanField(default=False)
+    def __str__(self) -> str:
+        return f"{self.fk_user.username} / {self.fk_friend.username}"
     
 class SolicitacaoContato(models.Model):
     origem = models.ForeignKey(User, on_delete=models.CASCADE, related_name='solicitacao_contato_origem_set')
