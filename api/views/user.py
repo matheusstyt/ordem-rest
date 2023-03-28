@@ -93,6 +93,31 @@ class LoginViewSet(views.APIView):
         }
         return Response(content)
 
+class RegistrarView(views.APIView):
+    permission_classes = [permissions.AllowAny]
+    def get(self, request, format=None):
+        return Response(status=status.HTTP_200_OK)
+    def post(self, request, format=None):
+        user_email = request.data["email"]
+        user_username = request.data['username']
+        user_password = request.data['password']
+        
+        if(User.objects.filter(email=user_email, username=user_username).exists()):
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        else:
+            try:
+                user = User.objects.create_user(username=user_username, email=user_email, password=user_password)
+
+                user_serializer = UserSerializer(user)
+
+                res = { 'user_data' : user_serializer.data}
+
+                return Response(res, status=status.HTTP_201_CREATED)
+            except Exception as e:
+                return Response(e, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+        
+
 @authentication_classes([TokenAuthenticationCustom])
 @permission_classes([IsAuthenticated])
 class PersonagemViewSet(viewsets.ModelViewSet):

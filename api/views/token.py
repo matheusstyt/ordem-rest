@@ -20,8 +20,9 @@ class GetToken(ObtainAuthToken):
                          'user_id':user.pk,
                          'username':user.username,
                          'email':user.email})
+    
 class LogoutView(APIView):
-    permission_classes = [permissions.DjangoModelPermissionsOrAnonReadOnly]
+    permission_classes = [permissions.AllowAny]
     def post(self, request, format=None):
         # Recupera o token do usuário atual
         token = Token.objects.get(user=request.user)
@@ -29,3 +30,5 @@ class LogoutView(APIView):
         token.delete()
         # Retorna uma resposta vazia com o status HTTP 204 (No Content)
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    
