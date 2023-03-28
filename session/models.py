@@ -45,4 +45,19 @@ class Solicitacao(models.Model):
     fk_de = models.ForeignKey(User, on_delete=models.CASCADE, related_name='solicitacao_de_set')
     fk_para = models.ForeignKey(User, on_delete=models.CASCADE, related_name='solicitacao_para_set')
     status = models.BooleanField(default=False) 
+
+class Armamento(models.Model):
+    descricao = models.CharField(max_length=120)
+    categoria_1 = models.CharField(max_length=50)
+    categoria_2 = models.CharField(max_length=50)
+    categoria_3 = models.CharField(max_length=70)
+    alcance = models.CharField(max_length=50)
+    dano_passivo = models.CharField(max_length=120)
+    dano_ativo = models.IntegerField()
+    tipo = models.CharField(max_length=30)
+    espaco = models.IntegerField()
     
+class ArmamentoUser(models.Model):
+    fk_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    fk_armamento = models.ForeignKey(Armamento, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)

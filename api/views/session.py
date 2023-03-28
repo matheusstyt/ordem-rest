@@ -11,7 +11,7 @@ class SessionViewSet(viewsets.ModelViewSet):
     serializer_class = SessionSerializer
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['fk_mestre']
+    filterset_fields = ['descricao']
     search_fields = ['fk_mestre__username']
     ordering_fields = ['data_criacao']
 
@@ -35,3 +35,18 @@ class SessionViewSet(viewsets.ModelViewSet):
                 'players': players_list,
             })
         return Response({'session': items})
+class ArmamentosUserViewSet(viewsets.ModelViewSet):
+    serializer_class = ArmamentoSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['id']
+    search_fields = ['id']
+    ordering_fields = ['id']
+
+class ArmamentosViewSet(viewsets.ModelViewSet):
+    serializer_class = ArmamentoUserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['fk_user']
+    search_fields = ['fk_user']
+    ordering_fields = ['fk_user']

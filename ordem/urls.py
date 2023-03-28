@@ -13,6 +13,8 @@ router.register(r'contact', FriendListViewSet, basename='FriendList')
 router.register(r'ask', SolicitacaoContatoViewSet, basename='solicitacaocontato')
 router.register(r'personagem', PersonagemViewSet)
 router.register(r'session', SessionViewSet, basename='session')
+router.register(r'armamento', SessionViewSet, basename='session')
+router.register(r'armamentoUser', SessionViewSet, basename='session')
 urlpatterns = [
     path('token', GetToken.as_view()),
     path('', include(router.urls)),
