@@ -13,3 +13,11 @@ class ArmamentoUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = ArmamentoUser
         fields = "__all__"
+class AcessoriosSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Acessorios
+        fields = "__all__"
+class RituaisSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Rituais
+        fields = "__all__"

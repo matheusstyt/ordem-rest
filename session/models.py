@@ -46,6 +46,24 @@ class Solicitacao(models.Model):
     fk_para = models.ForeignKey(User, on_delete=models.CASCADE, related_name='solicitacao_para_set')
     status = models.BooleanField(default=False) 
 
+class Acessorios(models.Model):
+    descricao = models.CharField(max_length=100)
+    obs = models.CharField(max_length=400)
+    espaco = models.IntegerField()
+    fk_user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+class Rituais(models.Model):
+    descricao = models.CharField(max_length=100, blank=True)
+    obs = models.CharField(max_length=400, blank=True)
+    alcance = models.CharField(max_length=50, blank=True)
+    dano_passivo = models.CharField(max_length=120, blank=True)
+    dano_ativo = models.IntegerField( blank=True)
+    tipo = models.CharField(max_length=30, blank=True)
+    ocultismo = models.IntegerField( blank=True)
+    categoria = models.CharField(max_length=50, blank=True)
+    fk_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
+
+
 class Armamento(models.Model):
     descricao = models.CharField(max_length=120)
     categoria_1 = models.CharField(max_length=50)
@@ -56,6 +74,7 @@ class Armamento(models.Model):
     dano_ativo = models.IntegerField()
     tipo = models.CharField(max_length=30)
     espaco = models.IntegerField()
+    fk_user = models.ForeignKey(User, on_delete=models.CASCADE)
     
 class ArmamentoUser(models.Model):
     fk_user = models.ForeignKey(User, on_delete=models.CASCADE)

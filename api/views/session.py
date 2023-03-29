@@ -42,9 +42,27 @@ class ArmamentosUserViewSet(viewsets.ModelViewSet):
     filterset_fields = ['id']
     search_fields = ['id']
     ordering_fields = ['id']
-
 class ArmamentosViewSet(viewsets.ModelViewSet):
-    serializer_class = ArmamentoUserSerializer
+    queryset = Armamento.objects.all()
+    serializer_class = ArmamentoSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['fk_user']
+    search_fields = ['fk_user']
+    ordering_fields = ['fk_user']
+
+class AcessoriosViewSet(viewsets.ModelViewSet):
+    queryset = Acessorios.objects.all()
+    serializer_class = AcessoriosSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['fk_user']
+    search_fields = ['fk_user']
+    ordering_fields = ['fk_user']
+
+class RituaisViewSet(viewsets.ModelViewSet):
+    queryset = Rituais.objects.all()
+    serializer_class = RituaisSerializer
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['fk_user']
