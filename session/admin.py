@@ -9,3 +9,5 @@ admin.site.register(SessionPlayers)
 
 admin.site.register(FriendList)
 admin.site.register(Solicitacao)
+admin.site.register(JogadoresSessao)
+admin.site.register(SolicitacaoJogador)

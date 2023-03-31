@@ -21,13 +21,16 @@ class Session(models.Model):
     status = models.BooleanField(default=False)
     
     def __str__(self) -> str:
-        return self.fk_mestre.email
+        return f"{self.fk_mestre.username} | {self.id}"
 
 class SolicitacaoJogador(models.Model):
-    origem = models.ForeignKey(User, on_delete=models.CASCADE, related_name='solicitacao_jogador_origem_set')
+    fk_sessao = models.ForeignKey(Session, on_delete=models.CASCADE, related_name='solicitacao_jogador_fk_sessao_set')
+    fk_mestre = models.ForeignKey(User, on_delete=models.CASCADE, related_name='solicitacao_jogador_fk_mestre_set')
     destino = models.ForeignKey(User, on_delete=models.CASCADE, related_name='solicitacao_jogador_destino_set')
     status = models.BooleanField(default=False) 
-
+    def __str__(self) -> str:
+        return self.fk_sessao.email
+    
 class JogadoresSessao(models.Model):
     fk_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='jogadoressessao_fk_user_set')
     fk_session = models.ForeignKey(Session, on_delete=models.CASCADE, related_name='jogadoressessao_fksession_set')
