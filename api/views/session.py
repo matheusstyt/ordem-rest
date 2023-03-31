@@ -68,3 +68,33 @@ class RituaisViewSet(viewsets.ModelViewSet):
     filterset_fields = ['fk_user']
     search_fields = ['fk_user']
     ordering_fields = ['fk_user']
+
+class JogadoresSessaoViewSet(viewsets.ModelViewSet):
+    queryset = JogadoresSessao.objects.all()
+    serializer_class = JogadoresSessaoSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['fk_user']
+    search_fields = ['fk_user']
+    ordering_fields = ['fk_user']
+
+class SolicitacaoJogadorViewSet(viewsets.ModelViewSet):
+    queryset = SolicitacaoJogador.objects.all()
+    serializer_class = SolicitacaoJogadorSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def list(self, request, *args, **kwargs):
+        solicitacoes = SolicitacaoJogador.objects.filter(destino=request.user)
+        items = []
+        for solicitacao in solicitacoes:
+
+            items.append({
+                'id': solicitacao.id,
+                'origem': solicitacao.origem.username,
+                'destino': solicitacao.destino.username,
+                'fk_origem': solicitacao.origem.id,
+                'fk_destino': solicitacao.destino.id,
+                'status': solicitacao.status,
+ 
+            })
+        return Response({'askplayer': items})

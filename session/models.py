@@ -22,6 +22,19 @@ class Session(models.Model):
     
     def __str__(self) -> str:
         return self.fk_mestre.email
+
+class SolicitacaoJogador(models.Model):
+    origem = models.ForeignKey(User, on_delete=models.CASCADE, related_name='solicitacao_jogador_origem_set')
+    destino = models.ForeignKey(User, on_delete=models.CASCADE, related_name='solicitacao_jogador_destino_set')
+    status = models.BooleanField(default=False) 
+
+class JogadoresSessao(models.Model):
+    fk_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='jogadoressessao_fk_user_set')
+    fk_session = models.ForeignKey(Session, on_delete=models.CASCADE, related_name='jogadoressessao_fksession_set')
+    data_inicio = models.CharField(max_length=100)
+    status_online = models.BooleanField(default=False)
+    def __str__(self) -> str:
+        return f"{self.fk_user.username} / {self.fk_session.fk_mestre.username}"
     
 class SessionLog(models.Model):
     fk_session = models.ForeignKey(Session, on_delete=models.CASCADE)

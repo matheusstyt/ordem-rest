@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.urls import include, path
 
 from api.views.token import GetToken, LogoutView
-from api.views.session import AcessoriosViewSet, ArmamentosViewSet, RituaisViewSet, SessionViewSet
+from api.views.session import AcessoriosViewSet, ArmamentosViewSet, JogadoresSessaoViewSet, RituaisViewSet, SessionViewSet, SolicitacaoJogadorViewSet
 from api.views.user import FriendListViewSet, PersonagemViewSet, RegistrarView, SolicitacaoContatoViewSet, UserList, UserViewSet
 from rest_framework.authtoken import views
 router = routers.DefaultRouter()
@@ -17,6 +17,9 @@ router.register(r'armamento', ArmamentosViewSet, basename='armamento')
 router.register(r'acessorios', AcessoriosViewSet, basename='acessorios')
 router.register(r'rituais', RituaisViewSet, basename='rituais')
 router.register(r'armamentoUser', SessionViewSet, basename='session')
+
+router.register(r'askplayer', SolicitacaoJogadorViewSet, basename='JogadoresSessao')
+router.register(r'players', JogadoresSessaoViewSet, basename='SolicitacaoJogador')
 urlpatterns = [
     path('token', GetToken.as_view()),
     path('', include(router.urls)),

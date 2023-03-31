@@ -21,3 +21,13 @@ class RituaisSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rituais
         fields = "__all__"
+
+class SolicitacaoJogadorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SolicitacaoJogador
+        fields = "__all__"
+        
+class JogadoresSessaoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = JogadoresSessao
+        fields = "__all__"
