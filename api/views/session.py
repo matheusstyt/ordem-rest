@@ -128,13 +128,13 @@ class JogadoresSessaoViewSet(viewsets.ModelViewSet):
     
     def list(self, request, *args, **kwargs):
         print(request.data)
-        fk_session = request.query_params.get('fk_user', None)
-        if fk_session is None:
+        fk_user = request.query_params.get('fk_user', None)
+        if fk_user is None:
             # Retorna todos os jogadores de sessões de qualquer usuário
             list_players = JogadoresSessao.objects.all()
         else:
             # Filtra os jogadores de sessões do usuário logado pelo parâmetro fk_session
-            list_players = JogadoresSessao.objects.filter(fk_session=fk_session)
+            list_players = JogadoresSessao.objects.filter(fk_user=fk_user)
 
         items = []
         for player in list_players:
@@ -145,6 +145,7 @@ class JogadoresSessaoViewSet(viewsets.ModelViewSet):
                 'data_inicio': player.data_inicio,
                 'player': player.fk_user.username,
                 'mestre': player.fk_session.fk_mestre.username,
+                'fk_mestre': player.fk_session.fk_mestre.id,
                 'status': player.status_online,
             })
         return Response({'players': items})
