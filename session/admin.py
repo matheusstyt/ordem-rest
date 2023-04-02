@@ -11,3 +11,9 @@ admin.site.register(FriendList)
 admin.site.register(Solicitacao)
 admin.site.register(JogadoresSessao)
 admin.site.register(SolicitacaoJogador)
+
+admin.site.register(Atributo)
+admin.site.register(Atributos)
+
+admin.site.register(Pericia)
+admin.site.register(Pericias)

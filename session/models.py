@@ -104,3 +104,11 @@ class Atributo(models.Model):
 class Atributos(models.Model):
     fk_atributo = models.ForeignKey(Atributo, on_delete= models.CASCADE)
     fk_session = models.ForeignKey(Session, on_delete=models.CASCADE)
+
+class Pericia(models.Model):
+    nome = models.CharField(max_length=50)
+    valor = models.IntegerField()
+    
+class Pericias(models.Model):
+    fk_pericia = models.ForeignKey(Pericia, on_delete= models.CASCADE)
+    fk_session = models.ForeignKey(Session, on_delete=models.CASCADE)

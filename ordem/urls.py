@@ -22,7 +22,8 @@ router.register(r'askplayer', SolicitacaoJogadorViewSet, basename='JogadoresSess
 router.register(r'players', JogadoresSessaoViewSet, basename='SolicitacaoJogador')
 router.register(r'atributo', AtributoViewSet, basename='atributo')
 router.register(r'atributos', AtributosViewSet, basename='atributos')
-
+router.register(r'pericia', PericiaViewSet, basename='pericia')
+router.register(r'pericias', PericiasViewSet, basename='pericias')
 urlpatterns = [
     path('token', GetToken.as_view()),
     path('', include(router.urls)),

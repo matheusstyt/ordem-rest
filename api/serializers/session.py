@@ -40,3 +40,12 @@ class AtributoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Atributo
         fields = "__all__"
+        
+class PericiasSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Pericias
+        fields = "__all__"
+class PericiaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Pericia
+        fields = "__all__"

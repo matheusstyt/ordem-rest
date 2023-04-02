@@ -191,6 +191,37 @@ class AtributoViewSet(viewsets.ModelViewSet):
     ordering_fields = ['id']
     
     def create(self, request, *args, **kwargs):
-        if Atributo.objects.filter(nome = request.data['nome']).exists():
-            return Response(status=status.HTTP_403_FORBIDDEN)
+        nome = request.data['nome']
+        if Atributo.objects.filter(nome = nome).exists():
+            atributo_existente = Atributo.objects.get(nome = nome)
+            serializer = self.get_serializer(atributo_existente)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        return super().create(request, *args, **kwargs)
+
+class PericiasViewSet(viewsets.ModelViewSet):
+    queryset = Pericias.objects.all()
+    serializer_class = PericiasSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['fk_session']
+    search_fields = ['fk_session']
+    ordering_fields = ['fk_session']
+
+class PericiaViewSet(viewsets.ModelViewSet):
+    queryset = Pericia.objects.all()
+    serializer_class = PericiaSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['id']
+    search_fields = ['id']
+    ordering_fields = ['id']
+    
+    def create(self, request, *args, **kwargs):
+        nome = request.data['nome']
+        if Pericia.objects.filter(nome = nome).exists():
+            pericia_existente = Pericia.objects.get(nome = nome)
+            serializer = self.get_serializer(pericia_existente)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
         return super().create(request, *args, **kwargs)
