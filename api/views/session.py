@@ -93,7 +93,7 @@ class AcessoriosViewSet(viewsets.ModelViewSet):
     filterset_fields = ['fk_user']
     search_fields = ['fk_user']
     ordering_fields = ['fk_user']
-
+    
 class RituaisViewSet(viewsets.ModelViewSet):
     queryset = Rituais.objects.all()
     serializer_class = RituaisSerializer
@@ -171,3 +171,26 @@ class SolicitacaoJogadorViewSet(viewsets.ModelViewSet):
  
             })
         return Response({'askplayer': items})
+
+class AtributosViewSet(viewsets.ModelViewSet):
+    queryset = Atributos.objects.all()
+    serializer_class = AtributosSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['fk_session']
+    search_fields = ['fk_session']
+    ordering_fields = ['fk_session']
+
+class AtributoViewSet(viewsets.ModelViewSet):
+    queryset = Atributo.objects.all()
+    serializer_class = AtributoSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['id']
+    search_fields = ['id']
+    ordering_fields = ['id']
+    
+    def create(self, request, *args, **kwargs):
+        if Atributo.objects.filter(nome = request.data['nome']).exists():
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        return super().create(request, *args, **kwargs)

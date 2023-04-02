@@ -96,3 +96,11 @@ class ArmamentoUser(models.Model):
     fk_user = models.ForeignKey(User, on_delete=models.CASCADE)
     fk_armamento = models.ForeignKey(Armamento, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+class Atributo(models.Model):
+    nome = models.CharField(max_length=50)
+    valor = models.IntegerField()
+    
+class Atributos(models.Model):
+    fk_atributo = models.ForeignKey(Atributo, on_delete= models.CASCADE)
+    fk_session = models.ForeignKey(Session, on_delete=models.CASCADE)

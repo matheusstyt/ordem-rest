@@ -31,3 +31,12 @@ class JogadoresSessaoSerializer(serializers.ModelSerializer):
     class Meta:
         model = JogadoresSessao
         fields = "__all__"
+        
+class AtributosSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Atributos
+        fields = "__all__"
+class AtributoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Atributo
+        fields = "__all__"
