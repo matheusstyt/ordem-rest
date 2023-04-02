@@ -9,26 +9,60 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, generics, permissions, viewsets
 class SessionViewSet(viewsets.ModelViewSet):
     serializer_class = SessionSerializer
+    queryset = Session.objects.all()
     permission_classes = [permissions.IsAuthenticated]
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['descricao']
-    search_fields = ['fk_mestre__username']
-    ordering_fields = ['data_criacao']
+    
+    def retrieve(self, request, *args, **kwargs):
+        session_id = kwargs.get('pk')
+        session = Session.objects.filter(pk=session_id).first()
+        if not session:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
+        players = JogadoresSessao.objects.filter(fk_session=session_id)
+        players_list = []
+        for player in players:
+            players_list.append({
+                'id': player.id,
+                'fk_user': player.fk_user.id,
+                'fk_session': player.fk_session.id,
+                'data_inicio': player.data_inicio,
+                'player': player.fk_user.username,
+                'mestre': player.fk_session.fk_mestre.username,
+                'status': player.status_online,
+            })
+
+        response_data = {
+            'id': session.id,
+            'fk_mestre': session.fk_mestre.id,
+            'mestre': session.fk_mestre.username,
+            'descricao': session.descricao,
+            'data_criacao': session.data_criacao,
+            'status': session.status,
+            'players': players_list,
+        }
+
+        return Response({'session': response_data})
+    
     def list(self, request, *args, **kwargs):
         sessions = Session.objects.filter(fk_mestre=request.user)
         items = []
         for session in sessions:
-            players = SessionPlayers.objects.filter(fk_session=session)
+            players = JogadoresSessao.objects.filter(fk_session=session.id)
             players_list = []
             for player in players:
                 players_list.append({
-                    'id': player.fk_player.id,
-                    'status': player.status,
+                    'id': player.id,
+                    'fk_user': player.fk_user.id,
+                    'fk_session': player.fk_session.id,
+                    'data_inicio': player.data_inicio,
+                    'player': player.fk_user.username,
+                    'mestre': player.fk_session.fk_mestre.username,
+                    'status': player.status_online,
                 })
             items.append({
                 'id': session.id,
                 'fk_mestre': session.fk_mestre.id,
+                'mestre': session.fk_mestre.username,
                 'descricao': session.descricao,
                 'data_criacao': session.data_criacao,
                 'status': session.status,
@@ -73,10 +107,48 @@ class JogadoresSessaoViewSet(viewsets.ModelViewSet):
     queryset = JogadoresSessao.objects.all()
     serializer_class = JogadoresSessaoSerializer
     permission_classes = [permissions.IsAuthenticated]
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['fk_user']
-    search_fields = ['fk_user']
-    ordering_fields = ['fk_user']
+    
+    # def retrieve(self, request, *args, **kwargs):
+    #     player_id = kwargs.get('pk')
+    #     player = JogadoresSessao.objects.filter(fk_user=player_id).first()
+    #     if not player:
+    #         return Response(status=status.HTTP_404_NOT_FOUND)
+
+    #     body = {
+    #         'id': player.id,
+    #         'fk_user': player.fk_user.id,
+    #         'fk_session': player.fk_session.id,
+    #         'data_inicio': player.data_inicio,
+    #         'player': player.fk_user.username,
+    #         'mestre': player.fk_session.fk_mestre.username,
+    #         'status': player.status_online,
+    #     }
+ 
+    #     return Response({'player': body})
+    
+    def list(self, request, *args, **kwargs):
+        print(request.data)
+        fk_session = request.query_params.get('fk_user', None)
+        if fk_session is None:
+            # Retorna todos os jogadores de sessões de qualquer usuário
+            list_players = JogadoresSessao.objects.all()
+        else:
+            # Filtra os jogadores de sessões do usuário logado pelo parâmetro fk_session
+            list_players = JogadoresSessao.objects.filter(fk_session=fk_session)
+
+        items = []
+        for player in list_players:
+            items.append({      
+                'id': player.id,
+                'fk_user': player.fk_user.id,
+                'fk_session': player.fk_session.id,
+                'data_inicio': player.data_inicio,
+                'player': player.fk_user.username,
+                'mestre': player.fk_session.fk_mestre.username,
+                'status': player.status_online,
+            })
+        return Response({'players': items})
+
 
 class SolicitacaoJogadorViewSet(viewsets.ModelViewSet):
     queryset = SolicitacaoJogador.objects.all()
@@ -90,10 +162,11 @@ class SolicitacaoJogadorViewSet(viewsets.ModelViewSet):
 
             items.append({
                 'id': solicitacao.id,
-                'origem': solicitacao.origem.username,
-                'destino': solicitacao.destino.username,
-                'fk_origem': solicitacao.origem.id,
+                'fk_sessao': solicitacao.fk_sessao.id,
+                'fk_mestre': solicitacao.fk_mestre.id,
                 'fk_destino': solicitacao.destino.id,
+                'destino': solicitacao.destino.username,
+                'mestre': solicitacao.fk_mestre.username,
                 'status': solicitacao.status,
  
             })
