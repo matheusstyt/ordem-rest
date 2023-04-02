@@ -24,6 +24,8 @@ router.register(r'atributo', AtributoViewSet, basename='atributo')
 router.register(r'atributos', AtributosViewSet, basename='atributos')
 router.register(r'pericia', PericiaViewSet, basename='pericia')
 router.register(r'pericias', PericiasViewSet, basename='pericias')
+router.register(r'resistencia', ResistenciaViewSet, basename='resistencia')
+router.register(r'resistencias', ResistenciasViewSet, basename='resistencias')
 urlpatterns = [
     path('token', GetToken.as_view()),
     path('', include(router.urls)),

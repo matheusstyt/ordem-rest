@@ -180,6 +180,15 @@ class AtributosViewSet(viewsets.ModelViewSet):
     filterset_fields = ['fk_session']
     search_fields = ['fk_session']
     ordering_fields = ['fk_session']
+    def create(self, request, *args, **kwargs):
+        fk_atributo = request.data['fk_atributo']
+        if Atributos.objects.filter(fk_atributo = fk_atributo).exists():
+            atributos_existente = Atributos.objects.get(fk_atributo = fk_atributo)
+            serializer = self.get_serializer(atributos_existente)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            print('NAO TEM')
+            return super().create(request, *args, **kwargs)
 
 class AtributoViewSet(viewsets.ModelViewSet):
     queryset = Atributo.objects.all()
@@ -207,6 +216,15 @@ class PericiasViewSet(viewsets.ModelViewSet):
     filterset_fields = ['fk_session']
     search_fields = ['fk_session']
     ordering_fields = ['fk_session']
+    def create(self, request, *args, **kwargs):
+        fk_pericia = request.data['fk_pericia']
+        if Pericias.objects.filter(fk_pericia = fk_pericia).exists():
+            pericias_existente = Pericias.objects.get(fk_pericia = fk_pericia)
+            serializer = self.get_serializer(pericias_existente)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            print('NAO TEM')
+            return super().create(request, *args, **kwargs)
 
 class PericiaViewSet(viewsets.ModelViewSet):
     queryset = Pericia.objects.all()
@@ -225,3 +243,40 @@ class PericiaViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_200_OK)
         
         return super().create(request, *args, **kwargs)
+
+class ResistenciasViewSet(viewsets.ModelViewSet):
+    queryset = Resistencias.objects.all()
+    serializer_class = ResistenciasSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['fk_session']
+    search_fields = ['fk_session']
+    ordering_fields = ['fk_session']
+    
+    def create(self, request, *args, **kwargs):
+        fk_resistencia = request.data['fk_resistencia']
+        if Resistencias.objects.filter(fk_resistencia = fk_resistencia).exists():
+            resistencias_existente = Resistencias.objects.get(fk_resistencia = fk_resistencia)
+            serializer = self.get_serializer(resistencias_existente)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            print('NAO TEM')
+            return super().create(request, *args, **kwargs)
+class ResistenciaViewSet(viewsets.ModelViewSet):
+    queryset = Resistencia.objects.all()
+    serializer_class = ResistenciaSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['id']
+    search_fields = ['id']
+    ordering_fields = ['id']
+    
+    def create(self, request, *args, **kwargs):
+        nome = request.data['nome']
+        if Resistencia.objects.filter(nome = nome).exists():
+            resistencias_existente = Resistencia.objects.get(nome = nome)
+            serializer = self.get_serializer(resistencias_existente)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            print('NAO TEM')
+            return super().create(request, *args, **kwargs)

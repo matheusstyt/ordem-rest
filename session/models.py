@@ -112,3 +112,11 @@ class Pericia(models.Model):
 class Pericias(models.Model):
     fk_pericia = models.ForeignKey(Pericia, on_delete= models.CASCADE)
     fk_session = models.ForeignKey(Session, on_delete=models.CASCADE)
+    
+class Resistencia(models.Model):
+    nome = models.CharField(max_length=50)
+    valor = models.IntegerField()
+    
+class Resistencias(models.Model):
+    fk_resistencia = models.ForeignKey(Resistencia, on_delete= models.CASCADE)
+    fk_session = models.ForeignKey(Session, on_delete=models.CASCADE)

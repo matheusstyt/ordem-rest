@@ -49,3 +49,12 @@ class PericiaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pericia
         fields = "__all__"
+
+class ResistenciasSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Resistencias
+        fields = "__all__"
+class ResistenciaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Resistencia
+        fields = "__all__"

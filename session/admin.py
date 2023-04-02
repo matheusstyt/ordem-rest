@@ -17,3 +17,6 @@ admin.site.register(Atributos)
 
 admin.site.register(Pericia)
 admin.site.register(Pericias)
+
+admin.site.register(Resistencia)
+admin.site.register(Resistencias)
