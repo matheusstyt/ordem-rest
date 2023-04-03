@@ -78,24 +78,6 @@ class Rituais(models.Model):
     ocultismo = models.IntegerField( blank=True)
     categoria = models.CharField(max_length=50, blank=True)
     fk_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
-
-
-class Armamento(models.Model):
-    descricao = models.CharField(max_length=120)
-    categoria_1 = models.CharField(max_length=50)
-    categoria_2 = models.CharField(max_length=50)
-    categoria_3 = models.CharField(max_length=70)
-    alcance = models.CharField(max_length=50)
-    dano_passivo = models.CharField(max_length=120)
-    dano_ativo = models.IntegerField()
-    tipo = models.CharField(max_length=30)
-    espaco = models.IntegerField()
-    fk_user = models.ForeignKey(User, on_delete=models.CASCADE)
-    
-class ArmamentoUser(models.Model):
-    fk_user = models.ForeignKey(User, on_delete=models.CASCADE)
-    fk_armamento = models.ForeignKey(Armamento, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
     
 class Atributo(models.Model):
     nome = models.CharField(max_length=50)
@@ -108,11 +90,14 @@ class Atributos(models.Model):
 class Pericia(models.Model):
     nome = models.CharField(max_length=50)
     valor = models.IntegerField()
-    
+    def __str__(self) -> str:
+        return self.nome
+
 class Pericias(models.Model):
     fk_pericia = models.ForeignKey(Pericia, on_delete= models.CASCADE)
     fk_session = models.ForeignKey(Session, on_delete=models.CASCADE)
-    
+    def __str__(self) -> str:
+        return f"pericia {self.fk_pericia.id} / session {self.fk_session.id}"
 class Resistencia(models.Model):
     nome = models.CharField(max_length=50)
     valor = models.IntegerField()
@@ -120,3 +105,22 @@ class Resistencia(models.Model):
 class Resistencias(models.Model):
     fk_resistencia = models.ForeignKey(Resistencia, on_delete= models.CASCADE)
     fk_session = models.ForeignKey(Session, on_delete=models.CASCADE)
+
+class Armamento(models.Model):
+    descricao = models.CharField(max_length=120)
+    categoria_1 = models.CharField(max_length=50)
+    categoria_2 = models.CharField(max_length=50)
+    categoria_3 = models.CharField(max_length=70)
+    alcance = models.CharField(max_length=50)
+    dano_passivo = models.CharField(max_length=120)
+    dano_ativo = models.IntegerField()
+    tipo = models.CharField(max_length=30)
+    espaco = models.IntegerField()
+    def __str__(self) -> str:
+        return f"armamento {self.descricao}"
+    
+class Armamentos(models.Model):
+    fk_session = models.ForeignKey(Session, on_delete=models.CASCADE)
+    fk_armamento = models.ForeignKey(Armamento, on_delete=models.CASCADE)
+    def __str__(self) -> str:
+        return f"armamento {self.fk_armamento.id} / session {self.fk_session.id}"

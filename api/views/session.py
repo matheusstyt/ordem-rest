@@ -69,22 +69,7 @@ class SessionViewSet(viewsets.ModelViewSet):
                 'players': players_list,
             })
         return Response({'session': items})
-class ArmamentosUserViewSet(viewsets.ModelViewSet):
-    serializer_class = ArmamentoSerializer
-    permission_classes = [permissions.IsAuthenticated]
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['id']
-    search_fields = ['id']
-    ordering_fields = ['id']
-class ArmamentosViewSet(viewsets.ModelViewSet):
-    queryset = Armamento.objects.all()
-    serializer_class = ArmamentoSerializer
-    permission_classes = [permissions.IsAuthenticated]
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['fk_user']
-    search_fields = ['fk_user']
-    ordering_fields = ['fk_user']
-
+    
 class AcessoriosViewSet(viewsets.ModelViewSet):
     queryset = Acessorios.objects.all()
     serializer_class = AcessoriosSerializer
@@ -182,13 +167,15 @@ class AtributosViewSet(viewsets.ModelViewSet):
     search_fields = ['fk_session']
     ordering_fields = ['fk_session']
     def create(self, request, *args, **kwargs):
-        fk_atributo = request.data['fk_atributo']
-        if Atributos.objects.filter(fk_atributo = fk_atributo).exists():
-            atributos_existente = Atributos.objects.get(fk_atributo = fk_atributo)
-            serializer = self.get_serializer(atributos_existente)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        atributo = request.data['fk_atributo']
+        session = request.data['fk_session']
+
+        atributos = Atributos.objects.filter(fk_atributo = atributo, fk_session = session)
+
+        if atributos.exists():
+            return Response(status=status.HTTP_200_OK)
         else:
-            print('NAO TEM')
             return super().create(request, *args, **kwargs)
 
 class AtributoViewSet(viewsets.ModelViewSet):
@@ -218,13 +205,15 @@ class PericiasViewSet(viewsets.ModelViewSet):
     search_fields = ['fk_session']
     ordering_fields = ['fk_session']
     def create(self, request, *args, **kwargs):
-        fk_pericia = request.data['fk_pericia']
-        if Pericias.objects.filter(fk_pericia = fk_pericia).exists():
-            pericias_existente = Pericias.objects.get(fk_pericia = fk_pericia)
-            serializer = self.get_serializer(pericias_existente)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        session = request.data['fk_session']
+        pericia = request.data['fk_pericia']
+
+        pericias = Pericias.objects.filter(fk_pericia=pericia, fk_session=session)
+
+        if pericias.exists():
+            return Response(status=status.HTTP_200_OK)
         else:
-            print('NAO TEM')
             return super().create(request, *args, **kwargs)
 
 class PericiaViewSet(viewsets.ModelViewSet):
@@ -241,7 +230,7 @@ class PericiaViewSet(viewsets.ModelViewSet):
         if Pericia.objects.filter(nome = nome).exists():
             pericia_existente = Pericia.objects.get(nome = nome)
             serializer = self.get_serializer(pericia_existente)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         
         return super().create(request, *args, **kwargs)
 
@@ -255,14 +244,18 @@ class ResistenciasViewSet(viewsets.ModelViewSet):
     ordering_fields = ['fk_session']
     
     def create(self, request, *args, **kwargs):
-        fk_resistencia = request.data['fk_resistencia']
-        if Resistencias.objects.filter(fk_resistencia = fk_resistencia).exists():
-            resistencias_existente = Resistencias.objects.get(fk_resistencia = fk_resistencia)
-            serializer = self.get_serializer(resistencias_existente)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        resistencia = request.data['fk_resistencia']
+        session = request.data['fk_session']
+
+        resistencias = Resistencias.objects.filter( fk_resistencia = resistencia, fk_session = session )
+
+        if resistencias.exists():
+
+            return Response(status=status.HTTP_200_OK)
         else:
-            print('NAO TEM')
             return super().create(request, *args, **kwargs)
+        
 class ResistenciaViewSet(viewsets.ModelViewSet):
     queryset = Resistencia.objects.all()
     serializer_class = ResistenciaSerializer
@@ -281,3 +274,56 @@ class ResistenciaViewSet(viewsets.ModelViewSet):
         else:
             print('NAO TEM')
             return super().create(request, *args, **kwargs)
+        
+class ArmamentosViewSet(viewsets.ModelViewSet):
+    queryset = Armamentos.objects.all()
+    serializer_class = ArmamentosSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['fk_session']
+    search_fields = ['fk_session']
+    ordering_fields = ['fk_session']
+    def create(self, request, *args, **kwargs):
+
+        armamento = request.data['fk_armamento']
+        session = request.data['fk_session']
+
+        armamentos = Armamentos.objects.filter(fk_armamento = armamento, fk_session = session)
+
+        if armamentos.exists():
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return super().create(request, *args, **kwargs)
+
+class ArmamentoViewSet(viewsets.ModelViewSet):
+    queryset = Armamento.objects.all()
+    serializer_class = ArmamentoSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['id']
+    search_fields = ['id']
+    ordering_fields = ['id']
+    
+    def create(self, request, *args, **kwargs):
+        descricao = request.data['descricao']
+        categoria_1 = request.data['categoria_1']
+        categoria_2 = request.data['categoria_2']
+        categoria_3 = request.data['categoria_3']
+        alcance = request.data['alcance']
+        dano_passivo = request.data['dano_passivo']
+        dano_ativo = request.data['dano_ativo']
+        tipo = request.data['tipo']
+        espaco = request.data['espaco']
+        armamento = Armamento.objects.filter(descricao = descricao, categoria_1 = categoria_1, 
+                                             categoria_2 = categoria_2, categoria_3 = categoria_3,
+                                             alcance = alcance, dano_passivo = dano_passivo,
+                                             dano_ativo = dano_ativo, tipo= tipo, espaco = espaco)
+        if armamento.exists():
+            Armamento_existente = Armamento.objects.get(descricao = descricao, categoria_1 = categoria_1, 
+                                             categoria_2 = categoria_2, categoria_3 = categoria_3,
+                                             alcance = alcance, dano_passivo = dano_passivo,
+                                             dano_ativo = dano_ativo, tipo= tipo, espaco = espaco)
+            serializer = self.get_serializer(Armamento_existente)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        return super().create(request, *args, **kwargs)

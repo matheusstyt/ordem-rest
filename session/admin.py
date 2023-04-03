@@ -20,3 +20,6 @@ admin.site.register(Pericias)
 
 admin.site.register(Resistencia)
 admin.site.register(Resistencias)
+
+admin.site.register(Armamento)
+admin.site.register(Armamentos)
