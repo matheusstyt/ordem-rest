@@ -61,3 +61,12 @@ class ArmamentosSerializer(serializers.ModelSerializer):
     class Meta:
         model = armamentos
         fields = "__all__"
+
+class AcessorioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Acessorio
+        fields = "__all__"
+class AcessoriosSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Acessorios
+        fields = "__all__"

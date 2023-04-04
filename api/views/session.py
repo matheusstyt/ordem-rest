@@ -327,3 +327,45 @@ class ArmamentoViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_200_OK)
         
         return super().create(request, *args, **kwargs)
+
+class AcessoriosViewSet(viewsets.ModelViewSet):
+    queryset = Acessorios.objects.all()
+    serializer_class = AcessoriosSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['fk_session']
+    search_fields = ['fk_session']
+    ordering_fields = ['fk_session']
+    def create(self, request, *args, **kwargs):
+
+        acessorio = request.data['fk_acessorio']
+        session = request.data['fk_session']
+
+        acessorios = Acessorios.objects.filter(fk_acessorio = acessorio, fk_session = session)
+
+        if acessorios.exists():
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return super().create(request, *args, **kwargs)
+
+class AcessorioViewSet(viewsets.ModelViewSet):
+    queryset = Acessorio.objects.all()
+    serializer_class = AcessorioSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['id']
+    search_fields = ['id']
+    ordering_fields = ['id']
+    
+    def create(self, request, *args, **kwargs):
+        nome = request.data['nome']
+        descricao = request.data['descricao']
+        espaco = request.data['espaco']
+
+        acessorio = Acessorio.objects.filter(nome = nome, descricao = descricao, espaco = espaco)
+        if acessorio.exists():
+            acessorio_existente = Acessorio.objects.get(nome = nome, descricao = descricao, espaco = espaco)
+            serializer = self.get_serializer(acessorio_existente)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        return super().create(request, *args, **kwargs)

@@ -124,3 +124,16 @@ class Armamentos(models.Model):
     fk_armamento = models.ForeignKey(Armamento, on_delete=models.CASCADE)
     def __str__(self) -> str:
         return f"armamento {self.fk_armamento.id} / session {self.fk_session.id}"
+    
+class Acessorio(models.Model):
+    nome = models.CharField(max_length=120)
+    descricao = models.CharField(max_length=120)
+    espaco = models.IntegerField()
+    def __str__(self) -> str:
+        return f"acessorio {self.nome}"
+    
+class Acessorios(models.Model):
+    fk_session = models.ForeignKey(Session, on_delete=models.CASCADE)
+    fk_acessorio = models.ForeignKey(Acessorio, on_delete=models.CASCADE)
+    def __str__(self) -> str:
+        return f"acessorio {self.fk_acessorio.id} / session {self.fk_session.id}"

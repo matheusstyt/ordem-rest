@@ -23,3 +23,6 @@ admin.site.register(Resistencias)
 
 admin.site.register(Armamento)
 admin.site.register(Armamentos)
+
+admin.site.register(Acessorio)
+admin.site.register(Acessorios)

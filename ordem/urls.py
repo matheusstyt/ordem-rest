@@ -30,6 +30,9 @@ router.register(r'resistencias', ResistenciasViewSet, basename='resistencias')
 
 router.register(r'armamentosSession', ArmamentosViewSet, basename='armamentos')
 router.register(r'armamentoSession', ArmamentoViewSet, basename='armamento')
+
+router.register(r'acessoriosSession', AcessoriosViewSet, basename='acessorios')
+router.register(r'acessorioSession', AcessorioViewSet, basename='acessorio')
 urlpatterns = [
     path('token', GetToken.as_view()),
     path('', include(router.urls)),
