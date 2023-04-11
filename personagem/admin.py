@@ -12,17 +12,13 @@ admin.site.register(SanidadeBar)
 admin.site.register(OcultismoBar)
 admin.site.register(EsforcoBar)
 
-admin.site.register(Armamento)
-admin.site.register(Item)
+admin.site.register(ArmamentosPersonagem)
+admin.site.register(AcessoriosPersonagem)
 
-admin.site.register(Atributo)
-admin.site.register(Pericia)
-admin.site.register(Resistencia)
+admin.site.register(AtributosPersonagem)
+admin.site.register(PericiasPersonagem)
+admin.site.register(ResistenciasPersonagem)
 
-admin.site.register(Atributos)
-admin.site.register(Pericias)
-admin.site.register(Resistencias)
 admin.site.register(Iventario)
 
-admin.site.register(Antescendente)
-admin.site.register(Antescendentes)
+admin.site.register(AntescendentesPersonagem)

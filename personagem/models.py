@@ -1,5 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import User 
+from django.contrib.auth.models import User
+
+from session.models import Session 
 
 class VidaBar(models.Model):
     atual = models.IntegerField()
@@ -22,90 +24,118 @@ class OcultismoBar(models.Model):
 class EsforcoBar(models.Model):
     atual = models.IntegerField()
     maximo = models.IntegerField()
-    temporario = models.IntegerField()
+    temporario = models.IntegerField(default=0)
     def __str__(self) -> str:
             return f'{str(self.atual)} de {str(self.maximo)}'
-    
-class Armamento(models.Model):
-    nome = models.CharField(max_length=100, blank=True, null=True)
-    categoria_1 = models.IntegerField()
-    categoria_2 = models.CharField(max_length=100, blank=True, null=True)
-    dano = models.IntegerField()
-    critico = models.CharField(max_length=100, blank=True, null=True)
-    alcance = models.IntegerField()
-    tipo = models.CharField(max_length=100, blank=True, null=True)
-    peso = models.IntegerField()
-    def __str__(self) -> str:
-        return self.nome
-
-class Item(models.Model):
-    descricao = models.CharField(max_length=100, blank=True, null=True)
-    peso = models.IntegerField(blank=True, null=True)
-    def __str__(self) -> str:
-        return self.descricao
   
-class Antescendente(models.Model):
-    nome = models.CharField(max_length=100, blank=True, null=True)
-    descricao = models.CharField(max_length=100, blank=True, null=True)
+# class Antescendente(models.Model):
+#     nome = models.CharField(max_length=100, blank=True, null=True)
+#     descricao = models.CharField(max_length=100, blank=True, null=True)
+#     def __str__(self) -> str:
+#         return self.nome   
+class AntescendentesPersonagem(models.Model):
+ #   fk_Antescendente = models.ForeignKey(Antescendente, blank=True, null=True)
+    cadeia = models.CharField(max_length=5000)
     def __str__(self) -> str:
-        return self.nome   
-class Antescendentes(models.Model):
-    fk_Antescendente = models.ManyToManyField(Antescendente, blank=True, null=True)
+            return 'Cadeia de antescendentes'
+# class Atributo(models.Model):
+#     nome = models.CharField(max_length=100, blank=True, null=True)
+#     valor = models.IntegerField()
+#     def __str__(self) -> str:
+#         return self.nome 
     
-class Atributo(models.Model):
-    nome = models.CharField(max_length=100, blank=True, null=True)
-    valor = models.IntegerField()
-    def __str__(self) -> str:
-        return self.nome 
-class Atributos(models.Model):
-    fk_Atributo = models.ManyToManyField(Atributo, blank=True, null=True)
+class AtributosPersonagem(models.Model):
+#    fk_Atributo = models.ForeignKey(Atributo, blank=True, null=True)
+    cadeia = models.CharField(max_length=5000)
     def __str__(self) -> str:
             return 'Cadeia de atributos'
-class Pericia(models.Model):
-    nome = models.CharField(max_length=100, blank=True, null=True)
-    valor = models.IntegerField()
-    def __str__(self) -> str:
-        return self.nome 
-class Pericias(models.Model):
     
-    fk_Pericia = models.ManyToManyField(Pericia, blank=True, null=True)
+# class Pericia(models.Model):
+#     nome = models.CharField(max_length=100, blank=True, null=True)
+#     valor = models.IntegerField()
+#     def __str__(self) -> str:
+#         return self.nome 
+    
+class PericiasPersonagem(models.Model):
+#    fk_Pericia = models.ForeignKey(Pericia, blank=True, null=True)
+    cadeia = models.CharField(max_length=5000)
     def __str__(self) -> str:
             return 'Cadeia de pericias'
-class Resistencia(models.Model):
-    nome = models.CharField(max_length=100, blank=True, null=True)
-    valor = models.IntegerField()
-    def __str__(self) -> str:
-        return self.nome 
-class Resistencias(models.Model):
-    fk_Resistencia = models.ManyToManyField(Resistencia, blank=True, null=True)
+    
+# class Resistencia(models.Model):
+#     nome = models.CharField(max_length=100, blank=True, null=True)
+#     valor = models.IntegerField()
+#     def __str__(self) -> str:
+#         return self.nome 
+    
+class ResistenciasPersonagem(models.Model):
+#    fk_Resistencia = models.ForeignKey(Resistencia, blank=True, null=True)
+    cadeia = models.CharField(max_length=5000)
     def __str__(self) -> str:
         return 'Cadeia de resistencias'
-class Iventario(models.Model):
-    fk_armamento = models.ManyToManyField(Armamento, blank=True, null=True)
-    fk_item = models.ManyToManyField(Item, blank=True, null=True)
-    espaco_total = models.IntegerField()
-    def __str__(self) -> str:
-        return str(self.espaco_total)
     
 class Personagem(models.Model):
     nome = models.CharField(max_length=100, blank=True, null=True)
     origem = models.CharField(max_length=100, blank=True, null=True)
-    idade = models.IntegerField()
+    idade = models.IntegerField(blank=True, null=True)
+    classe = models.CharField(max_length=100, blank=True, null=True)
+    NEX = models.IntegerField(default= 0)
+    trilha = models.CharField(max_length=100, blank=True, null=True)
+    patente = models.CharField(max_length=100, blank=True, null=True)
     naturalidade = models.CharField(max_length=100, blank=True, null=True)
     residencia = models.CharField(max_length=100, blank=True, null=True)
-    classe = models.CharField(max_length=100, blank=True, null=True)
-    NEX = models.IntegerField()
     
+    
+    lesao_grave = models.BooleanField(default=False)
+    inconsciente = models.BooleanField(default=False)
+    morrendo = models.BooleanField(default=False)
+    traumatizado = models.BooleanField(default=False)
+    enlouquecendo = models.BooleanField(default=False)
+
     fk_vida = models.OneToOneField(VidaBar, on_delete=models.CASCADE)
     fk_sanidade = models.OneToOneField(SanidadeBar, on_delete=models.CASCADE, blank=True)
     fk_ocultismo = models.OneToOneField(OcultismoBar, on_delete=models.CASCADE, blank=True)
     fk_esforco = models.OneToOneField(EsforcoBar, on_delete=models.CASCADE)
     
-    fk_atributos = models.OneToOneField(Atributos, on_delete=models.CASCADE)
-    fk_pericias = models.OneToOneField(Pericias, on_delete=models.CASCADE, blank=True)
-    fk_resistencias = models.OneToOneField(Resistencias, on_delete=models.CASCADE, blank=True)
-    fk_antescendentes = models.OneToOneField(Antescendentes, on_delete=models.CASCADE, blank=True)
-    fk_iventario = models.OneToOneField(Iventario, on_delete=models.CASCADE, blank=True)
+    fk_atributos = models.OneToOneField(AtributosPersonagem, on_delete=models.CASCADE)
+    fk_pericias = models.OneToOneField(PericiasPersonagem, on_delete=models.CASCADE, blank=True)
+    fk_resistencias = models.OneToOneField(ResistenciasPersonagem, on_delete=models.CASCADE, blank=True)
+    fk_antescendentes = models.OneToOneField(AntescendentesPersonagem, on_delete=models.CASCADE, blank=True)
     
+    fk_session = models.ForeignKey(Session, on_delete=models.CASCADE)
+
     def __str__(self) -> str:
         return self.nome
+    
+class ArmamentosPersonagem(models.Model):
+    arma = models.CharField(max_length=100, blank=True, null=True)
+    categoria_0 = models.CharField(max_length=100, blank=True, null=True)
+    categoria_1 = models.CharField(max_length=100, blank=True, null=True)
+    categoria_2 = models.CharField(max_length=100, blank=True, null=True)
+    alcance = models.CharField(max_length=100, blank=True, null=True)
+    critico = models.CharField(max_length=100, blank=True, null=True)
+    dano = models.CharField(max_length=100, blank=True, null=True)
+    espaco = models.IntegerField()
+    tipo = models.CharField(max_length=100, blank=True, null=True)
+    
+    fk_personagem = models.ForeignKey(Personagem, on_delete=models.CASCADE)
+    def __str__(self) -> str:
+        return self.arma
+
+class AcessoriosPersonagem(models.Model):
+    nome = models.CharField(max_length=100, blank=True, null=True)
+    descricao = models.CharField(max_length=400, blank=True, null=True)
+    espaco = models.IntegerField(blank=True, null=True)
+
+    fk_personagem = models.ForeignKey(Personagem, on_delete=models.CASCADE)
+    def __str__(self) -> str:
+        return self.descricao
+
+class Iventario(models.Model):
+    espaco_total = models.IntegerField()
+
+    fk_armamentos = models.ForeignKey(ArmamentosPersonagem, on_delete= models.CASCADE, blank=True, null=True)
+    fk_acessorios = models.ForeignKey(AcessoriosPersonagem, on_delete= models.CASCADE, blank=True, null=True)
+    fk_personagem = models.CharField(max_length=50)
+    def __str__(self) -> str:
+        return str(self.espaco_total)

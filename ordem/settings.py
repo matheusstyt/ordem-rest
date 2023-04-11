@@ -145,7 +145,12 @@ REST_FRAMEWORK = {
 }
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.100.26', '170.10.0.50']
+ALLOWED_HOSTS = ['localhost', 
+                 '127.0.0.1', 
+                 '192.168.100.26', 
+                 '192.168.100.80', 
+                 '192.168.100.52', 
+                 '170.10.0.50']
 
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:8080',  
