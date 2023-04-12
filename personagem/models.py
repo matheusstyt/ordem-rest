@@ -103,6 +103,7 @@ class Personagem(models.Model):
     fk_antescendentes = models.OneToOneField(AntescendentesPersonagem, on_delete=models.CASCADE, blank=True)
     
     fk_session = models.ForeignKey(Session, on_delete=models.CASCADE)
+    fk_user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return self.nome

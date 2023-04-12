@@ -10,7 +10,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from api.serializers.personagem import *
 from personagem.models import *
 
-#@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 class PersonagemViewSet(ModelViewSet):
      queryset = Personagem.objects.all()
      serializer_class = PersonagemSerializer
@@ -29,6 +29,8 @@ class PersonagemViewSet(ModelViewSet):
 
                item_full['id'] = item.id
                item_full['fk_session'] = item.fk_session.id
+               item_full['fk_user'] = item.fk_user.id
+               item_full['jogador'] = item.fk_user.username
                item_full['nome'] = item.nome
                item_full['origem'] = item.origem
                item_full['idade'] = item.idade
@@ -36,7 +38,7 @@ class PersonagemViewSet(ModelViewSet):
                item_full['residencia'] = item.residencia
                item_full['classe'] = item.classe
                item_full['NEX'] = item.NEX   
-               
+               item_full['patente'] = item.patente   
                item_full['lesao_grave'] = item.lesao_grave
                item_full['inconsciente'] = item.inconsciente
                item_full['morrendo'] = item.morrendo
@@ -119,7 +121,7 @@ class PersonagemViewSet(ModelViewSet):
 
           return Response(res, status=status.HTTP_200_OK)
 
-#@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 class VidaViewSet(ModelViewSet):
      queryset = VidaBar.objects.all()
      serializer_class = VidaBarSerializer
@@ -127,7 +129,7 @@ class VidaViewSet(ModelViewSet):
      filterset_fields = ['id']
      search_fields = ['id']
 
-#@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 class SanidadeViewSet(ModelViewSet):
      queryset = SanidadeBar.objects.all()
      serializer_class = SanidadeBarSerializer
@@ -135,7 +137,7 @@ class SanidadeViewSet(ModelViewSet):
      filterset_fields = ['id']
      search_fields = ['id']
 
-#@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 class OcultismoViewSet(ModelViewSet):
      queryset = OcultismoBar.objects.all()
      serializer_class = OcultismoBarSerializer
@@ -143,7 +145,7 @@ class OcultismoViewSet(ModelViewSet):
      filterset_fields = ['id']
      search_fields = ['id']
 
-#@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 class EsforcoViewSet(ModelViewSet):
      queryset = EsforcoBar.objects.all()
      serializer_class = EsforcoBarSerializer
@@ -151,7 +153,7 @@ class EsforcoViewSet(ModelViewSet):
      filterset_fields = ['id']
      search_fields = ['id']
 
-#@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 class AntescendentesPersonagemViewSet(ModelViewSet):
      queryset = AntescendentesPersonagem.objects.all()
      serializer_class = AntescendentesPersonagemSerializer
@@ -159,7 +161,7 @@ class AntescendentesPersonagemViewSet(ModelViewSet):
      filterset_fields = ['id']
      search_fields = ['id']
 
-#@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 class AtributosPersonagemViewSet(ModelViewSet):
      queryset = AtributosPersonagem.objects.all()
      serializer_class = AtributosPersonagemSerializer
@@ -167,7 +169,7 @@ class AtributosPersonagemViewSet(ModelViewSet):
      filterset_fields = ['id']
      search_fields = ['id']
 
-#@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 class PericiasPersonagemViewSet(ModelViewSet):
      queryset = PericiasPersonagem.objects.all()
      serializer_class = PericiasPersonagemSerializer
@@ -175,7 +177,7 @@ class PericiasPersonagemViewSet(ModelViewSet):
      filterset_fields = ['id']
      search_fields = ['id']
 
-#@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 class ResistenciasPersonagemViewSet(ModelViewSet):
      queryset = ResistenciasPersonagem.objects.all()
      serializer_class = ResistenciasPersonagemSerializer
@@ -183,7 +185,7 @@ class ResistenciasPersonagemViewSet(ModelViewSet):
      filterset_fields = ['id']
      search_fields = ['id']
 
-#@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 class ArmamentosPersonagemViewSet(ModelViewSet):
      queryset = ArmamentosPersonagem.objects.all()
      serializer_class = ArmamentosPersonagemSerializer
@@ -191,7 +193,7 @@ class ArmamentosPersonagemViewSet(ModelViewSet):
      filterset_fields = ['fk_personagem']
      search_fields = ['fk_personagem']
 
-#@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 class AcessoriosPersonagemViewSet(ModelViewSet):
      queryset = AcessoriosPersonagem.objects.all()
      serializer_class = AcessoriosPersonagemSerializer
@@ -199,7 +201,7 @@ class AcessoriosPersonagemViewSet(ModelViewSet):
      filterset_fields = ['fk_personagem']
      search_fields = ['fk_personagem']
 
-#@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 class IventarioViewSet(ModelViewSet):
      queryset = Iventario.objects.all()
      serializer_class = IventarioSerializer
