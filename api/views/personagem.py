@@ -12,104 +12,113 @@ from personagem.models import *
 
 #@permission_classes([IsAuthenticated])
 class PersonagemViewSet(ModelViewSet):
-    queryset = Personagem.objects.all()
-    serializer_class = PersonagemSerializer
-    def list(self, request, *args, **kwargs):
-            itens_list = list()
-            all_Personagem = Personagem.objects.all()
-            for item in all_Personagem:
-                item_full = dict()
+     queryset = Personagem.objects.all()
+     serializer_class = PersonagemSerializer
 
-                item_full['id'] = item.id
-                item_full['nome'] = item.nome
-                item_full['origem'] = item.origem
-                item_full['idade'] = item.idade
-                item_full['naturalidade'] = item.naturalidade
-                item_full['residencia'] = item.residencia
-                item_full['classe'] = item.classe
-                item_full['NEX'] = item.NEX   
-                
-                item_full['lesao_grave'] = item.lesao_grave
-                item_full['inconsciente'] = item.inconsciente
-                item_full['morrendo'] = item.morrendo
-                item_full['traumatizado'] = item.traumatizado
-                item_full['enlouquecendo'] = item.enlouquecendo
+     def list(self, request, *args, **kwargs):
+          fk_session = request.query_params.get("fk_session", None)
+          if fk_session is None:
+               list_personagem = Personagem.objects.all()
+          else:
+               list_personagem = Personagem.objects.filter(fk_session=fk_session)
 
-                #DICIONÁRIOS DAS BARRAS
-                item_vida = dict()
-                item_sanidade = dict()
-                item_ocultismo = dict()
-                item_esforco = dict()
+          itens_list = list()
 
-                item_full['vida'] = {}
-                item_full['sanidade']  = {} 
-                item_full['ocultismo'] = {}
-                item_full['esforco'] = {}
+          for item in list_personagem:
+               item_full = dict()
 
-                item_vida = { "atual" : item.fk_vida.atual, "maximo" : item.fk_vida.maximo }
-                item_sanidade = { "atual" : item.fk_sanidade.atual, "maximo" : item.fk_sanidade.maximo }
-                item_ocultismo = { "atual" : item.fk_ocultismo.atual, "maximo" : item.fk_ocultismo.maximo }
-                item_esforco = { "atual" : item.fk_esforco.atual, "maximo" : item.fk_esforco.maximo }
+               item_full['id'] = item.id
+               item_full['fk_session'] = item.fk_session.id
+               item_full['nome'] = item.nome
+               item_full['origem'] = item.origem
+               item_full['idade'] = item.idade
+               item_full['naturalidade'] = item.naturalidade
+               item_full['residencia'] = item.residencia
+               item_full['classe'] = item.classe
+               item_full['NEX'] = item.NEX   
+               
+               item_full['lesao_grave'] = item.lesao_grave
+               item_full['inconsciente'] = item.inconsciente
+               item_full['morrendo'] = item.morrendo
+               item_full['traumatizado'] = item.traumatizado
+               item_full['enlouquecendo'] = item.enlouquecendo
 
-                item_full['vida'].append(item_vida)
-                item_full['sanidade'].append(item_sanidade)
-                item_full['ocultismo'].append(item_ocultismo)
-                item_full['esforco'].append(item_esforco)
+               #DICIONÁRIOS DAS BARRAS
+               item_vida = dict()
+               item_sanidade = dict()
+               item_ocultismo = dict()
+               item_esforco = dict()
 
-                # CADEIAS EM JSON 
-                item_full['antescendentes'] = item.fk_antescendentes.cadeia
-                item_full['atributos'] = item.fk_atributos.cadeia
-                item_full['pericias'] = item.fk_pericias.cadeia
-                item_full['resistencias'] = item.fk_resistencias
-                
-                # LOOP EM VÁRIOS OBJETOS 
-                # ARMAMENTOS
-                armamentos = ArmamentosPersonagem.objects.get(fk_personagem = item.id)
-                armamento_dict = dict()
+               item_full['vida'] = {}
+               item_full['sanidade']  = {} 
+               item_full['ocultismo'] = {}
+               item_full['esforco'] = {}
 
-                item_full['armamentos'] = {'armamento': []}
+               item_vida = { "atual" : item.fk_vida.atual, "maximo" : item.fk_vida.maximo }
+               item_sanidade = { "atual" : item.fk_sanidade.atual, "maximo" : item.fk_sanidade.maximo }
+               item_ocultismo = { "atual" : item.fk_ocultismo.atual, "maximo" : item.fk_ocultismo.maximo }
+               item_esforco = { "atual" : item.fk_esforco.atual, "maximo" : item.fk_esforco.maximo }
 
-                for arma in armamentos:
-                    armamento_dict = {
-                         
-                        'id': arma.id,
-                        'nome': arma.nome,
-                        'categoria_0': arma.categoria_0,
-                        'categoria_1': arma.categoria_1,
-                        'categoria_2': arma.categoria_2,
-                        'alcance': arma.alcance,
-                        'critico': arma.critico,
-                        'dano': arma.dano,
-                        'espaco': arma.espaco,
-                        'tipo': arma.tipo,
-                        'fk_personagem': arma.fk_personagem,
-                    }
-                    
-                    item_full['armamentos']['armamento'].append(armamento_dict)
+               item_full['vida'] = item_vida
+               item_full['sanidade'] = item_sanidade
+               item_full['ocultismo'] = item_ocultismo
+               item_full['esforco'] = item_esforco
 
-                #ACESSÓRIOS
-                acessorios = AcessoriosPersonagem.objects.get(fk_personagem = item.id)
-                acessorio_dict = dict()
+               # CADEIAS EM JSON 
+               item_full['antescendentes'] = item.fk_antescendentes.cadeia
+               item_full['atributos'] = item.fk_atributos.cadeia
+               item_full['pericias'] = item.fk_pericias.cadeia
+               item_full['resistencias'] = item.fk_resistencias.cadeia
+               
+               # LOOP EM VÁRIOS OBJETOS 
+               # ARMAMENTOS
+               if  ArmamentosPersonagem.objects.filter(fk_personagem = item.id):
+                    armamentos = ArmamentosPersonagem.objects.filter(fk_personagem = item.id)
+                    armamento_dict = dict()
 
-                item_full['acessorios'] = {'acessorio': []}
+                    item_full['armamentos'] = {'armamento': []}
 
-                for acessorio in acessorios:
-                    acessorio_dict = {
-                         
-                        'id': acessorio.id,
-                        'nome': acessorio.nome,
-                        'descricao': acessorio.descricao,
-                        'espaco': acessorio.espaco,
-                        'fk_personagem': acessorio.fk_personagem,
-                    }
-                    
-                    item_full['acessorios']['acessorio'].append(acessorio_dict)
-                itens_list.append(item_full)
+                    for arma in armamentos:
+                         armamento_dict = {
+                              
+                              'id': arma.id,
+                              'arma': arma.arma,
+                              'categoria_0': arma.categoria_0,
+                              'categoria_1': arma.categoria_1,
+                              'categoria_2': arma.categoria_2,
+                              'alcance': arma.alcance,
+                              'critico': arma.critico,
+                              'dano': arma.dano,
+                              'espaco': arma.espaco,
+                              'tipo': arma.tipo,
+                              'fk_personagem': arma.fk_personagem.id,
+                         }
+                         item_full['armamentos']['armamento'].append(armamento_dict)
 
-            res = { "personagem": itens_list }
+               #ACESSÓRIOS
+               if AcessoriosPersonagem.objects.filter(fk_personagem = item.id).exists():
+                    acessorios = AcessoriosPersonagem.objects.filter(fk_personagem = item.id)
 
-            return Response(res, status=status.HTTP_200_OK)
-    
+                    acessorio_dict = dict()
+
+                    item_full['acessorios'] = {'acessorio': []}
+                    for acessorio in acessorios:
+                         acessorio_dict = {
+                              
+                              'id': acessorio.id,
+                              'nome': acessorio.nome,
+                              'descricao': acessorio.descricao,
+                              'espaco': acessorio.espaco,
+                              'fk_personagem': acessorio.fk_personagem.id,
+                         }
+                         item_full['acessorios']['acessorio'].append(acessorio_dict)
+               
+               itens_list.append(item_full)
+
+          res = { "personagem": itens_list }
+
+          return Response(res, status=status.HTTP_200_OK)
+
 #@permission_classes([IsAuthenticated])
 class VidaViewSet(ModelViewSet):
      queryset = VidaBar.objects.all()
