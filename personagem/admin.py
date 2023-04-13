@@ -5,7 +5,7 @@ from django.contrib import admin
 
 from personagem.models import *
 
-
+admin.site.register(PerfilImage)
 admin.site.register(Personagem)
 admin.site.register(VidaBar)
 admin.site.register(SanidadeBar)

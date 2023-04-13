@@ -40,6 +40,7 @@ router.register(r'acessorioSession', AcessorioViewSet, basename='acessorio')
 
 router.register(r'personagem', PersonagemViewSet)
 
+router.register(r'perfil', PerfilViewSet)
 router.register(r'vidaPersonagem', VidaViewSet)
 router.register(r'sanidadePersonagem', SanidadeViewSet)
 router.register(r'ocultismoPersonagem', OcultismoViewSet)

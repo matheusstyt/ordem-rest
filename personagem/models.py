@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 from session.models import Session 
+from django_base64field.fields import Base64Field
 
 class VidaBar(models.Model):
     atual = models.IntegerField()
@@ -73,6 +74,9 @@ class ResistenciasPersonagem(models.Model):
     cadeia = models.CharField(max_length=5000)
     def __str__(self) -> str:
         return 'Cadeia de resistencias'
+
+class PerfilImage(models.Model):
+    image = Base64Field(max_length=900000, blank=True, null=True)
     
 class Personagem(models.Model):
     nome = models.CharField(max_length=100, blank=True, null=True)
@@ -102,6 +106,7 @@ class Personagem(models.Model):
     fk_resistencias = models.OneToOneField(ResistenciasPersonagem, on_delete=models.CASCADE, blank=True)
     fk_antescendentes = models.OneToOneField(AntescendentesPersonagem, on_delete=models.CASCADE, blank=True)
     
+    fk_perfil_img = models.OneToOneField(PerfilImage, on_delete=models.CASCADE)
     fk_session = models.ForeignKey(Session, on_delete=models.CASCADE)
     fk_user = models.ForeignKey(User, on_delete=models.CASCADE)
 
@@ -140,3 +145,7 @@ class Iventario(models.Model):
     fk_personagem = models.CharField(max_length=50)
     def __str__(self) -> str:
         return str(self.espaco_total)
+
+class Perfil(models.Model):
+    image = Base64Field(max_length=900000, blank=True, null=True)
+    fk_personagem = models.ForeignKey(Personagem, on_delete= models.CASCADE, blank=True, null=True)

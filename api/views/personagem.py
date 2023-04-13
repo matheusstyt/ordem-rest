@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import authentication_classes, permission_classes
 from django_filters.rest_framework import DjangoFilterBackend
-
+from rest_framework.parsers import MultiPartParser, FormParser
 from api.serializers.personagem import *
 from personagem.models import *
 
@@ -120,6 +120,15 @@ class PersonagemViewSet(ModelViewSet):
           res = { "personagem": itens_list }
 
           return Response(res, status=status.HTTP_200_OK)
+     
+@permission_classes([IsAuthenticated])
+class PerfilViewSet(ModelViewSet):
+     queryset = PerfilImage.objects.all()
+     serializer_class = PerfilSerializer
+     parser_classes = (MultiPartParser, FormParser)
+     # filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+     # filterset_fields = ["id"]
+     # search_fields = ['id']
 
 @permission_classes([IsAuthenticated])
 class VidaViewSet(ModelViewSet):

@@ -2,6 +2,9 @@
 from personagem.models import *
 from rest_framework import serializers
 from django.contrib.auth.models import User
+
+from drf_extra_fields.fields import Base64ImageField
+
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
@@ -18,6 +21,11 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = ['url', 'username', 'email', 'is_staff']
+
+class PerfilSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PerfilImage
+        fields = "__all__"
 
 class VidaBarSerializer(serializers.ModelSerializer):
     
