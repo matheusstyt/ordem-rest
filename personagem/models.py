@@ -88,7 +88,7 @@ class Personagem(models.Model):
     patente = models.CharField(max_length=100, blank=True, null=True)
     naturalidade = models.CharField(max_length=100, blank=True, null=True)
     residencia = models.CharField(max_length=100, blank=True, null=True)
-    
+    sexo = models.CharField(max_length=50)
     
     lesao_grave = models.BooleanField(default=False)
     inconsciente = models.BooleanField(default=False)

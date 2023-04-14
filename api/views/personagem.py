@@ -34,10 +34,13 @@ class PersonagemViewSet(ModelViewSet):
                item_full['nome'] = item.nome
                item_full['origem'] = item.origem
                item_full['idade'] = item.idade
+               item_full['sexo'] = item.sexo
+
                item_full['naturalidade'] = item.naturalidade
                item_full['residencia'] = item.residencia
                item_full['classe'] = item.classe
                item_full['NEX'] = item.NEX   
+               item_full['trilha'] = item.trilha   
                item_full['patente'] = item.patente   
                item_full['lesao_grave'] = item.lesao_grave
                item_full['inconsciente'] = item.inconsciente
@@ -51,6 +54,7 @@ class PersonagemViewSet(ModelViewSet):
                item_ocultismo = dict()
                item_esforco = dict()
 
+               item_full['perfil_img'] = item.fk_perfil_img.image
                item_full['vida'] = {}
                item_full['sanidade']  = {} 
                item_full['ocultismo'] = {}
