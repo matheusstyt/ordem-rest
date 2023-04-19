@@ -64,12 +64,23 @@ class PersonagemViewSet(ModelViewSet):
                item_sanidade = { "atual" : item.fk_sanidade.atual, "maximo" : item.fk_sanidade.maximo }
                item_ocultismo = { "atual" : item.fk_ocultismo.atual, "maximo" : item.fk_ocultismo.maximo }
                item_esforco = { "atual" : item.fk_esforco.atual, "maximo" : item.fk_esforco.maximo }
-
+               
                item_full['vida'] = item_vida
                item_full['sanidade'] = item_sanidade
                item_full['ocultismo'] = item_ocultismo
                item_full['esforco'] = item_esforco
-
+               # CÁLCULO PARA COR DO STATUS
+               percent =  (item.fk_vida.atual / item.fk_vida.maximo) * 100
+               if percent > 75:
+                    item_full['status_color'] = "rgb(98, 236, 60)"
+               elif percent >=50 and percent < 75:
+                    item_full['status_color'] = "rgb(223, 203, 20)"
+               elif percent >=25 and percent < 50:
+                    item_full['status_color'] = "rgb(255, 106, 0)"
+               elif percent >=1 and percent < 25:
+                    item_full['status_color'] = "rgb(244, 16, 16)"
+               else:
+                    item_full['status_color'] = "rgb(158, 158, 158)"
                # CADEIAS EM JSON 
                item_full['antescendentes'] = item.fk_antescendentes.cadeia
                item_full['atributos'] = item.fk_atributos.cadeia

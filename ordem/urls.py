@@ -19,7 +19,7 @@ router.register(r'rituais', RituaisViewSet, basename='rituais')
 # ROTAS DE SESSÕES / PAINEL
 
 router.register(r'askplayer', SolicitacaoJogadorViewSet, basename='JogadoresSessao')
-router.register(r'players', JogadoresSessaoViewSet, basename='SolicitacaoJogador')
+router.register(r'players', JogadoresSessaoViewSet, basename='JogadoresSessao')
 
 router.register(r'atributo', AtributoViewSet, basename='atributo')
 router.register(r'atributos', AtributosViewSet, basename='atributos')
